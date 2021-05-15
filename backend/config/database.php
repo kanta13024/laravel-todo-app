@@ -43,6 +43,14 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
+        // この設定を追加
+        // テストコードを実行したら、消える設定
+        'sqlite_testing' => [
+            'driver' => 'sqlite',
+            'database' => ':memory',
+            'prefix' => '',
+        ],
+
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
