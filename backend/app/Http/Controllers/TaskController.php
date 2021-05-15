@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Folder;
 use App\Task;
 use App\Http\Requests\CreateTask;
+use App\Http\Requests\EditTask;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -57,4 +58,34 @@ class TaskController extends Controller
         ]);
     }
 
+    /**
+    * GET /folders/{id}/tasks/{tasks_id}/edit
+    * タスクの編集画面 
+    */
+    public function showEditForm(int $id, int $task_id)
+    {
+        $task = Task::find($task_id);
+
+        return view('tasks/edit', [
+            'task' => $task,
+        ]);
+    }
+
+    public function edit(int $id, int $task_id, EditTask $request)
+    {
+        // タスク情報を取得
+        $task = Task::find($task_id);
+
+        // データベースへ挿入
+        $task->title = $request->title;
+        $task->status = $request->status;
+        $task->due_date = $request->due_date;
+        $task->save();
+
+        // tasks.indexへ返す
+        return redirect()->route('tasks.index', [
+            'id' => $task->folder_id,
+        ]);
+
+    }
 }
